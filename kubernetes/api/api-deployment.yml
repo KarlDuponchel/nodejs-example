@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: webapp
+  name: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: webapp
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        io.kompose.service: webapp
+    spec:
+      containers:
+        - env:            
+            - name: APP_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-cm
+                  key: app_db
+            - name: MSSQL_ROOT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: postgres_username
+            - name: MSSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: postgres_password
+            - name: RabbitMQ__Hostname
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-cm
+                  key: postgres_hostname
+          image: karlitocesi/dockerhub:webapp
+          name: postgres
+          ports:
+            - containerPort: 5432
+          resources:
+            limits:
+              cpu: 500m
+            requests:
+              cpu: 200m
+      restartPolicy: Always
