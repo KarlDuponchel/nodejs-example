@@ -5,9 +5,3 @@ metadata:
 data:
   app_db: postgres
   postgres_hostname: some-postgres
-  db_port: 5432
-  access_token_secret: 'YOUR_SECRET_KEY'
-  refresh_token_secret: 'YOUR_SECRET_KEY'
-  acces_token_expiry: '15m'
-  refresh_token_expiry: '7d'
-  refresh_token_cookie_name: 'jid'
