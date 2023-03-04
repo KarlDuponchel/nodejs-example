@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: pgadmin
+  labels:
+    app: pgadmin
+spec:
+  selector:
+    app: pgadmin
+  type: LoadBalancer
+  ports:
+    - name: pgadmin-port
+      port: 80
+      targetPort: 5050
+      protocol: TCP

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nodejs-configmap
+data:
+  db_host: postgresql
+  port: "3000"
+  db_database: postgres
+  db_dailect: postgres
+  db_port: "5432"
+  access_token_expiry: 15m
+  refresh_token_expiry: 7d
+  refresh_token_cookie_name: jid

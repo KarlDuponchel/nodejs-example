@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodejs
+  labels:
+    io.kompose.service: nodejs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nodejs
+  template:
+    metadata:
+      labels:
+        app: nodejs
+    spec:
+      containers:
+      - name: nodejs-app
+        image: karlitocesi/dockerhub
+        ports:
+          - containerPort: 3000
+        env:
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: nodejs-configmap
+              key: db_host
+        - name: PORT
+          valueFrom:
+            configMapKeyRef:
+              name: nodejs-configmap
+              key: port
+        - name:  DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: nodejs-secret
+              key: db_username
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: nodejs-secret
+              key: db_password
+        - name: DB_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: nodejs-configmap
+              key: db_database
+        - name: DB_DAILECT
+          valueFrom:
+            configMapKeyRef:
+              name: nodejs-configmap
+              key: db_dailect
+        - name: DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: nodejs-configmap
+              key: db_port
+        - name: ACCESS_TOKEN_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: nodejs-secret
+              key: access_token_secret
+        - name: REFRESH_TOKEN_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: nodejs-secret
+              key: refresh_token_secret
+        - name: ACCESS_TOKEN_EXPIRY
+          valueFrom:
+            configMapKeyRef:
+              name: nodejs-configmap
+              key: access_token_expiry
+        - name: REFRESH_TOKEN_EXPIRY
+          valueFrom:
+            configMapKeyRef:
+              name: nodejs-configmap
+              key: refresh_token_expiry
+        - name: REFRESH_TOKEN_COOKIE_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: nodejs-configmap
+              key: refresh_token_cookie_name
+        resources:
+          limits:
+            cpu: 500m
+          requests:
+            cpu: 200m

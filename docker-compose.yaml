@@ -1,15 +1,39 @@
 version: '3.8'
+
 services:
-  db:
-    container_name: webapp
-    image: postgres:14.1-alpine
+  app:
+    build: nodejs
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=mysecretpassword
+      PORT: 3000
+      DB_HOST: db
+      DB_USERNAME: postgres
+      DB_PASSWORD: admin
+      DB_DATABASE: postgres
+      DB_PORT: 5432
+      DB_DAILECT: 'postgres'
+      ACCESS_TOKEN_SECRET: 'YOUR_SECRET_KEY'
+      REFRESH_TOKEN_SECRET: 'YOUR_SECRET_KEY'
+      ACCESS_TOKEN_EXPIRY: '15m'
+      REFRESH_TOKEN_EXPIRY: '7d'
+      REFRESH_TOKEN_COOKIE_NAME: 'jid'
     ports:
-      - '3001:5432'
-    volumes: 
-      - db:/var/lib/postgresql/data
-volumes:
+      - 3000:3000
+    depends_on:
+      - db
+    networks:
+      - my-network
+
   db:
-    driver: local
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: postgres
+    ports:
+      - 5432:5432
+    networks:
+      - my-network
+
+networks:
+  my-network:
+    driver: bridge
